@@ -17,7 +17,7 @@ void Cache::GenerateSizes(){
   sizes.push_back(max*1.5);
 }
 
-void Cache::WarmArray(int* arrayToWarm, size_t size) {
+void Cache::Warming(int* arrayToWarm, size_t size) {
   [[maybe_unused]]int k;
   for (size_t i = 0; i < size; ++i) {
     k = arrayToWarm[i];
@@ -34,14 +34,14 @@ int* Cache::GenerateArray(size_t bufferSize) {
   return generatedArray;
 }
 
-
+ //прямой эксперимент
 void Cache::StraightExperiment() {
   std::vector<double> time;
   for (const double& size : sizes) {
     size_t bufferSize = ( size * 1024 * 1024 ) / 4;
     int* array = GenerateArray(bufferSize);
 
-    WarmArray(array, bufferSize);
+    Warming(array, bufferSize);
 
     [[maybe_unused]]int k;
     auto start = std::chrono::system_clock::now();
@@ -50,91 +50,30 @@ void Cache::StraightExperiment() {
     }
     auto end = std::chrono::system_clock::now();
     time.push_back(static_cast<double>(std::chrono::nanoseconds(end - start).count()));
+    delete[] array;  //нада нет?
   }
   data.emplace_back("straight", time);
 }
 
-std::ostream& operator<<(std::ostream& os, const Cache& experiments) {
-  for (size_t i = 0; i < experiments.data.size(); ++i) {
-    os << R"(Invistigations: )" << endl <<
-       R"(     travel_variant: )" << experiments.data[i].travelOrder << endl <<
-       R"(     experiments: )" << endl;
-    for (size_t j = 0; j < experiments.caches.size(); ++j) {
-      os << R"(           -experiment:
-            number: )" << j+1 << endl <<
-         R"(             input_data:
-                buffer_size: )" << experiments.caches[j] << " mb" << endl <<
-         R"(             results:
-                duration: )" << experiments.data[i].experimentTime[j] << " nanoseconds" << endl << endl;
-    }
-  }
-  return os;
-}
-
-
-
-
-
-
-
-/*
-//прогрев
-void Cache::warming(int* arr, int& h, const double& buffer){
-  for(int i = 0; i < buffer + 1; i += step) //step 16 столько в линии кэш int
-    h = arr[i];
-}
-
-int* Cache::GenerateArray(size_t bufferSize) {
-  int * generatedArray = new int [bufferSize];
-
-  for (size_t i = 0; i < bufferSize; ++I) {
-    generatedArray[i] = rand()%100;
-  }
-
-  return generatedArray;
-}
-
-
-
-
-
-
-
-
-
-
-//прямой эксперимент
-void Cache:: Straight_experiment() {
+//обратный
+void Cache::BackExperiment() {
   std::vector<double> time;
   for (const double& size : sizes) {
     size_t bufferSize = ( size * 1024 * 1024 ) / 4;
     int* array = GenerateArray(bufferSize);
 
-    warming(arr, h, buffer)
+    Warming(array, bufferSize);
 
     [[maybe_unused]]int k;
     auto start = std::chrono::system_clock::now();
-    for (size_t i = 0; i < bufferSize * 1000; ++i) { // EXPERIMENT
+    for (size_t i = bufferSize; i > 0 * 1000; --i) { // EXPERIMENT
       k = array[i % 1000];
     }
     auto end = std::chrono::system_clock::now();
-    time.push_back(static_cast<double>(std::chrono::nanoseconds(end - start).count()))
+    time.push_back(static_cast<double>(std::chrono::nanoseconds(end - start).count()));
   }
-
-void Cache:: Straight_experiment(){
-
-  for(const double& buffer:size)
-    size_t bufferSize = ( size * 1024 * 1024 ) / 4;
-  int* array = GenerateArray(bufferSize);
-    int* arr; //0.125, 1, 2, 4, 8, 12
-
-
-  auto startTime = std::chrono::high_resolution_clock::now();
-  for()
-
-  auto endTime = std::chrono::high_resolution_clock::now();
+  data.emplace_back("back", time);
 }
-*/
 
 
 
@@ -143,3 +82,33 @@ void Cache:: Straight_experiment(){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+std::ostream& operator<<(std::ostream& os, const Cache& experiments) {
+  for (size_t i = 0; i < experiments.data.size(); ++i) {
+    os << R"(Invistigations: )" << std::endl <<
+       R"(     travel_variant: )" << experiments.data[i].travelOrder << std::endl <<
+       R"(     experiments: )" << std::endl;
+    for (size_t j = 0; j < experiments.sizes.size(); ++j) {
+      os << R"(           -experiment:
+            number: )" << j+1 << std::endl <<
+         R"(             input_data:
+                buffer_size: )" << experiments.sizes[j] << " mb" << std::endl <<
+         R"(             results:
+                duration: )" << experiments.data[i].experimentTime[j] << " nanoseconds" << std::endl << std::endl;
+    }
+  }
+  return os;
+}

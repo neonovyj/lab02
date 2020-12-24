@@ -14,12 +14,11 @@
 #include <algorithm>
 #include <functional>
 
-using std::vector;
+
 using std::cout;
 using std::cin;
 using std::string;
 using std::stringstream;
-using std::endl;
 using std::ostream;
 
 struct Data;
@@ -36,16 +35,15 @@ class Cache {
 
  public:
   void GenerateSizes();
-  void warming(int* arr, int& h, const double& buffer);
+  void Warming(int * arrayToWarm, size_t size);
   void StraightExperiment();
-  void WarmArray(int * arrayToWarm, size_t size);
+  void BackExperiment();
   int* GenerateArray(size_t bufferSize);
 
   friend std::ostream& operator<<(std::ostream& os, const Cache& experiments);
  private:
   // 0.125 MB << 1 MB << 2 MB << 4 MB << 8 MB << 12 MB
   std::vector<double> sizes;
-  std::vector<double> caches {0.125, 2, 8};
   std::vector<ExperimentData> data;
 
   const double min = 0.256;
