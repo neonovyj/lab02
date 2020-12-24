@@ -20,8 +20,7 @@ HunterGate(
   SHA1 "35fa55bc1dfcf9f4d7264f8bb26cd1759ce1ae07"
 )
 
-# TODO: rename project and delete this comment
-project(template VERSION 0.1.0)
+project(lab02 VERSION 0.1.0)
 string(APPEND CMAKE_CXX_FLAGS " -pedantic -Werror -Wall -Wextra")
 string(APPEND CMAKE_CXX_FLAGS " -Wno-unused-command-line-argument")
 string(APPEND CMAKE_CXX_FLAGS " -Wshadow -Wnon-virtual-dtor")
@@ -30,8 +29,7 @@ hunter_add_package(GTest)
 find_package(GTest CONFIG REQUIRED)
 
 add_library(${PROJECT_NAME} STATIC
-  # enum your files and delete this comment
-  ${CMAKE_CURRENT_SOURCE_DIR}/sources/source.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/sources/cache.cpp
 )
 
 add_executable(demo
@@ -47,7 +45,6 @@ target_link_libraries(demo ${PROJECT_NAME})
 
 if(BUILD_TESTS)
   add_executable(tests
-    # TODO: enum your files and delete this comment
     ${CMAKE_CURRENT_SOURCE_DIR}/tests/test.cpp
   )
   target_link_libraries(tests ${PROJECT_NAME} GTest::gtest_main)
