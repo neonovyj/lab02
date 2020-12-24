@@ -27,7 +27,7 @@ void Cache::WarmArray(int* arrayToWarm, size_t size) {
 int* Cache::GenerateArray(size_t bufferSize) {
   int * generatedArray = new int [bufferSize];
 
-  for (size_t i = 0; i < bufferSize; ++I) {
+  for (size_t i = 0; i < bufferSize; ++i) {
     generatedArray[i] = rand()%100;
   }
 
@@ -55,17 +55,17 @@ void Cache::StraightExperiment() {
 }
 
 std::ostream& operator<<(std::ostream& os, const Cache& experiments) {
-  for (size_t i = 0; i < experiments.data_vector.size(); ++i) {
+  for (size_t i = 0; i < experiments.data.size(); ++i) {
     os << R"(Invistigations: )" << endl <<
-       R"(     travel_variant: )" << experiments.data_vector[i].travel << endl <<
+       R"(     travel_variant: )" << experiments.data[i].travelOrder << endl <<
        R"(     experiments: )" << endl;
-    for (size_t j = 0; j < experiments.cache.size(); ++j) {
+    for (size_t j = 0; j < experiments.caches.size(); ++j) {
       os << R"(           -experiment:
             number: )" << j+1 << endl <<
          R"(             input_data:
-                buffer_size: )" << experiments.cache[j] << " mb" << endl <<
+                buffer_size: )" << experiments.caches[j] << " mb" << endl <<
          R"(             results:
-                duration: )" << experiments.data_vector[i].time_vector[j] << " nanoseconds" << endl << endl;
+                duration: )" << experiments.data[i].experimentTime[j] << " nanoseconds" << endl << endl;
     }
   }
   return os;
