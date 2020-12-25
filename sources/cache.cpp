@@ -18,41 +18,42 @@ void Cache::GenerateSizes(){
 }
 
 void Cache::Warming(int* arrayToWarm, size_t size) {
-  [[maybe_unused]]int k;
-  for (size_t i = 0; i < size; ++i) {
-    k = arrayToWarm[i];
+  [[maybe_unused]]int k; //в двойных скобках, чтобы не было никаких предупреждений
+  for (size_t i = 0; i < size; ++i) { //проходимся по всему массиву, мы не знаем размер массива, тк его тут нет поэтому внизу передаем его в функцию, а тут получаем наш size
+    k = arrayToWarm[i]; //обращаемся к массиву по его размеру, прогреваем
   }
 }
 
-int* Cache::GenerateArray(size_t bufferSize) {
-  int * generatedArray = new int [bufferSize];
+int* Cache::GenerateArray(size_t bufferSize) { //получаем размер массива, который нужно сгенирировать, а выводим указатель на int, то есть сам динамический массив
+  int * generatedArray = new int [bufferSize];  //создаем массив
 
-  for (size_t i = 0; i < bufferSize; ++i) {
-    generatedArray[i] = rand()%100;
+  for (size_t i = 0; i < bufferSize; ++i) { //заполняем массив
+    generatedArray[i] = rand()%100; //ограничиваем значение функции сотней
   }
 
-  return generatedArray;
+  return generatedArray; //возвращаем массив
 }
 
  //прямой эксперимент
 void Cache::StraightExperiment() {
-  std::vector<double> time;
-  for (const double& size : sizes) {
-    size_t bufferSize = ( size * 1024 * 1024 ) / 4;
-    int* array = GenerateArray(bufferSize);
+  std::vector<double> time;//записываем время
+  for (const double& size : sizes) { //перебираем массив sizes и записываем все в size
+    size_t bufferSize = ( size * 1024 * 1024 ) / 4; //записываем наши проходы. size_t чтобы все поместилось. Берем size, переводим в байты
+    int* array = GenerateArray(bufferSize); //инициализирует array с помощью функции GenerateArray
 
-    Warming(array, bufferSize);
+    Warming(array, bufferSize); //прогреваем, передав наш массив. Мы не знаем размер массива, тк его тут нет поэтому bufferSize передаем его в функцию
 
     [[maybe_unused]]int k;
     auto start = std::chrono::system_clock::now();
-    for (size_t i = 0; i < bufferSize * 1000; ++i) { // EXPERIMENT
-      k = array[i % 1000];
+    for (size_t i = 0; i < bufferSize * 1000; i+=step) { // EXPERIMENT на эксперименте нам нужно пронгнать его тыщу раз, поэтому умножаем//step??
+      k = array[i % 1000]; //записываем все значения массива
     }
     auto end = std::chrono::system_clock::now();
-    time.push_back(static_cast<double>(std::chrono::nanoseconds(end - start).count()));
+    time.push_back(static_cast<double>(std::chrono::nanoseconds((end - start) / 1000).count())); //записываем время в массив, который выше
+    //time.push_back(static_cast<double>(std::chrono::nanoseconds(end - start).count()));
     delete[] array;  //нада нет?
   }
-  data.emplace_back("straight", time);
+  data.emplace_back("straight", time); //передаем все элементы для конструирования структуры (string порядок и время )
 }
 
 //обратный
@@ -61,39 +62,48 @@ void Cache::BackExperiment() {
   for (const double& size : sizes) {
     size_t bufferSize = ( size * 1024 * 1024 ) / 4;
     int* array = GenerateArray(bufferSize);
-
     Warming(array, bufferSize);
-
     [[maybe_unused]]int k;
     auto start = std::chrono::system_clock::now();
-    for (size_t i = bufferSize; i > 0 * 1000; --i) { // EXPERIMENT
+    for (size_t i = bufferSize * 1000; i > 0 ; i-=step) { // EXPERIMENT
       k = array[i % 1000];
     }
     auto end = std::chrono::system_clock::now();
-    time.push_back(static_cast<double>(std::chrono::nanoseconds(end - start).count()));
+
+   time.push_back(static_cast<double>(std::chrono::nanoseconds((end - start) / 1000).count()));
+    delete[] array;
   }
   data.emplace_back("back", time);
 }
 
+void Cache::RandomExperiment() {
+  std::vector<double> time;
+  for (const double& size : sizes) {
+    size_t bufferSize = ( size * 1024 * 1024 ) / 4;
+    int* array = GenerateArray(bufferSize);
 
+    std::vector<unsigned>::iterator start, end;
 
+    std::vector<unsigned> arr;
 
+    for (unsigned i = 0; i < bufferSize; i += step) arr.emplace_back(i);
+    start = arr.begin();
+    end = arr.end();
+    shuffle(start, end, std::mt19937(std::random_device()()));
 
+    Warming(array, bufferSize);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    auto startTime = std::chrono::high_resolution_clock::now();
+    [[maybe_unused]]int k;
+    for (size_t i = 0; i < bufferSize * 1000; i+=step) {
+      k = array[i % 1000];
+    }
+    auto endTime = std::chrono::high_resolution_clock::now();
+    time.push_back(static_cast<double>(std::chrono::nanoseconds((endTime - startTime) / 1000).count()));
+    delete[] array;
+  }
+  data.emplace_back("Random", time);
+}
 
 
 std::ostream& operator<<(std::ostream& os, const Cache& experiments) {

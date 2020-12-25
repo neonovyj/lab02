@@ -7,6 +7,7 @@ TEST(Example, EmptyTest) {
   experiments.GenerateSizes();
   experiments.StraightExperiment();
   experiments.BackExperiment();
+  experiments.RandomExperiment();
   std::cout << experiments;
   EXPECT_TRUE(true);
 }
