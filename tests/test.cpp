@@ -10,4 +10,3 @@ TEST(Example, EmptyTest) {
   experiments.RandomExperiment();
   std::cout << experiments; //вызов оператора
 }
-

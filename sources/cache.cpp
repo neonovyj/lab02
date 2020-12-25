@@ -25,16 +25,13 @@ int* Cache::GenerateArray(size_t bufferSize) { //получаем размер �
   }
   return generatedArray; //возвращаем массив
 }
-
  //прямой эксперимент
 void Cache::StraightExperiment() {
   std::vector<double> time;//записываем время
   for (const double& size : sizes) { //перебираем массив sizes и записываем все в size
     size_t bufferSize = ( size * 1024 * 1024 ) / 4; //записываем наши проходы. size_t чтобы все поместилось. Берем size, переводим в байты
     int* array = GenerateArray(bufferSize); //инициализирует array с помощью функции GenerateArray
-
     Warming(array, bufferSize); //прогреваем, передав наш массив. Мы не знаем размер массива, тк его тут нет поэтому bufferSize передаем его в функцию
-
     [[maybe_unused]]int k; //в двойных скобках, чтобы не было никаких предупреждений
     auto start = std::chrono::system_clock::now();
     for (size_t i = 0; i < bufferSize * quantity; i+=step) { // EXPERIMENT на эксперименте нам нужно прогнать его тыщу раз, поэтому умножаем/
@@ -46,7 +43,6 @@ void Cache::StraightExperiment() {
   }
   data.emplace_back("straight", time); //передаем все элементы для конструирования структуры (string порядок и время )
 }
-
 //обратный
 void Cache::BackExperiment() {
   std::vector<double> time; //принимаем время в вектор double time
@@ -60,7 +56,6 @@ void Cache::BackExperiment() {
       k = array[i % 1000];
     }
     auto end = std::chrono::system_clock::now();
-
    time.push_back(static_cast<double>(std::chrono::nanoseconds((end - start) / quantity).count()));//время передаем
     delete[] array;
   }

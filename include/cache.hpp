@@ -46,8 +46,4 @@ class Cache { //объявляем класс Cache
   const int quantity = 1000;
 };  // 0.128 MB << 1 MB << 2 MB << 4 MB << 8 MB << 12 MB
 
-
-
 #endif // INCLUDE_HEADER_HPP_
-
-
