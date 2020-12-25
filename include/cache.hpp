@@ -18,32 +18,32 @@ using std::ostream;
 
 
 
-class Cache { //объявляем класс Cache
-  struct ExperimentData //структура, в которой хранятся данные после отработки экспериментов
+class Cache {
+  struct ExperimentData
   {
-    std::string travelOrder; //порядок обхода
+    std::string travelOrder;
     std::vector<double> experimentTime;
-    ExperimentData(std::string order,const std::vector<double>& time) //конструктор, принимающий два значения. Константная ссылка
-        : travelOrder(std::move(order)), experimentTime(time) {} //move() —  функция, конвертирует передаваемый аргумент в r-value.
-  };//l-value — значение, которое имеет свой собственный адрес в памяти.
-  //r-value — значение, которое не имеет постоянного адреса в памяти.
+    ExperimentData(std::string order,const std::vector<double>& time)
+        : travelOrder(std::move(order)), experimentTime(time) {}
+  };
+
  public:
-  void CacheSizes(); //генирирует вектор
+  void CacheSizes();
   void Warming(int * arrayToWarm, size_t size);
   void StraightExperiment();
   void BackExperiment();
   void RandomExperiment();
-  int* GenerateArray(size_t bufferSize); //генирирует наш массив, заполняет числами
+  int* GenerateArray(size_t bufferSize);
 
-  friend std::ostream& operator<<(std::ostream& os, const Cache& experiments); //friend позволяет объявить operator как глобальную функцию
- private:                             //ostream для записи в поток
+  friend std::ostream& operator<<(std::ostream& os, const Cache& experiments);
+ private:
   std::vector<double> sizes;
-  std::vector<ExperimentData> data; //вектор вложенных структур, вектор, который будем выводить
-  const double min = 0.256;         //структура, в которой хранятся данные после отработки экспериментов
+  std::vector<ExperimentData> data;
+  const double min = 0.256;
   const double max = 8;
   const int step = 16;
   double n = 1;
   const int quantity = 1000;
-};  // 0.128 MB << 1 MB << 2 MB << 4 MB << 8 MB << 12 MB
+};
 
 #endif // INCLUDE_HEADER_HPP_

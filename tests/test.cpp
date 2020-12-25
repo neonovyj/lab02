@@ -3,10 +3,10 @@
 #include <gtest/gtest.h>
 
 TEST(Example, EmptyTest) {
-  Cache experiments; //берем наш класс и пользуемся экспериментами
-  experiments.CacheSizes();//генирируем размеры в зависимости от размеров кэша
-  experiments.StraightExperiment(); //вызываем наши функции
+  Cache experiments;
+  experiments.CacheSizes();
+  experiments.StraightExperiment();
   experiments.BackExperiment();
   experiments.RandomExperiment();
-  std::cout << experiments; //вызов оператора
+  std::cout << experiments;
 }
