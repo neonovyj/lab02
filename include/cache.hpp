@@ -14,7 +14,6 @@
 #include <algorithm>
 #include <functional>
 
-
 using std::cout;
 using std::cin;
 using std::string;
