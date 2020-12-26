@@ -25,7 +25,7 @@ int* Cache::GenerateArray(size_t bufferSize) {
   }
   return generatedArray;
 }
-//прямой эксперимент
+
 void Cache::StraightExperiment() {
   std::vector<double> time;
   for (const double& size : sizes) {
