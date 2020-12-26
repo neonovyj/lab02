@@ -37,12 +37,11 @@ class Cache {
 
   friend std::ostream& operator<<(std::ostream& os, const Cache& experiments);
  private:
-  std::vector<double> sizes;
   std::vector<ExperimentData> data;
-  const double min = 0.256;
-  const double max = 8;
+  std::vector<double> sizes;
+  const std::vector<double> cache = {0.256, 1, 8};
+  double degree = 1;
   const int step = 16;
-  double n = 1;
   const int quantity = 1000;
 };
 

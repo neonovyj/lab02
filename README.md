@@ -268,13 +268,13 @@ cache_size['3'] = 8 mb;
 
 
 ### Прямой проход
-![straight](./images/st.jpeg)
+![straight](./images/straight.jpg)
 
 ### Обратный проход 
-![back](./images/bc.jpeg)
+![back](./images/back.jpg)
 
 ### Рандомный проход
-![random](./images/rn.jpeg)
+![random](./images/random.jpg)
 
 ### Рекомендации
 

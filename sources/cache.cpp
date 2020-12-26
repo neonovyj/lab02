@@ -3,12 +3,12 @@
 #include <random>
 
 void Cache::CacheSizes(){
-  sizes.push_back(min/2);
-  while (n<max*1.5){
-    sizes.push_back(n);
-    n = n*2;
+  sizes.push_back(cache[0]*0.5);
+  while (degree < cache[2] * 1.5){
+    sizes.push_back(degree);
+    degree = degree*2;
   }
-  sizes.push_back(max*1.5);
+  sizes.push_back(cache[2]*1.5);
 }
 
 void Cache::Warming(int* arrayToWarm, size_t size) {
